@@ -1,0 +1,58 @@
+{
+  "employees": [
+    {
+      "fullName": "Thịnh",
+      "age": "18",
+      "department": "Leader",
+      "id": 1
+    },
+    {
+      "fullName": "Văn việt",
+      "age": "15",
+      "department": "Student",
+      "id": 4
+    },
+    {
+      "fullName": "Phương Thảo",
+      "age": "22",
+      "department": "Accountness",
+      "id": 6
+    },
+    {
+      "fullName": "Dev Toàn",
+      "age": "20",
+      "department": "IT",
+      "id": 1
+    },
+    {
+      "fullName": "Văn việt",
+      "age": "15",
+      "department": "Student",
+      "id": 4
+    },
+    {
+      "fullName": "Phương Thảo",
+      "age": "21",
+      "department": "Chinese Commerce",
+      "id": 5
+    },
+    {
+      "fullName": "Phương Thảo",
+      "age": "22",
+      "department": "Accountness",
+      "id": 6
+    },
+    {
+      "fullName": "Đỗ Văn Toàn vnext",
+      "age": "21",
+      "department": "It react",
+      "id": 7
+    },
+    {
+      "fullName": "Vnext it",
+      "age": "20",
+      "department": "React",
+      "id": 8
+    }
+  ]
+}
