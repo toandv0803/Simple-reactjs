@@ -65,7 +65,6 @@ class CreatePage extends Component {
               type="text"
               placeholder="Nhập tên của bạn"
               name="fullName"
-              // value={fullName}
             />
           </Form.Group>
 
@@ -76,7 +75,6 @@ class CreatePage extends Component {
               type="number"
               placeholder="Nhập tuổi của bạn"
               name="age"
-              // value={age}
             />
           </Form.Group>
           <Form.Group controlId="formDepartment">
@@ -86,7 +84,6 @@ class CreatePage extends Component {
               placeholder="Nhập tên phòng ban của bạn"
               onChange={(e) => this.onChange(e)}
               name="department"
-              // value={department}
             />
           </Form.Group>
           <Button variant="primary" type="submit">
