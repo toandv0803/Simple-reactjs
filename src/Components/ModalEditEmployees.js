@@ -20,7 +20,6 @@ export default class ModalEditEmployees extends Component {
   handleModal = (item) => {
     if (item) {
       this.setState({
-        show: !this.state.show,
         selectedEmployees: item,
         age: item ? item.age : "",
       });
@@ -107,7 +106,14 @@ export default class ModalEditEmployees extends Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleModal}>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                this.setState({
+                  show: false,
+                });
+              }}
+            >
               Hủy
             </Button>
             <Button variant="primary" onClick={this.onSubmit}>

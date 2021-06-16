@@ -15,9 +15,14 @@ export default class ModalDelete extends Component {
   static contextType = myContext;
 
   handleModal = (item) => {
+    if (item) {
+      this.setState({
+        selectedEmployees: item,
+      });
+    }
+
     this.setState({
       show: !this.state.show,
-      selectedEmployees: item,
     });
   };
 
