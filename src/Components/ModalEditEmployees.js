@@ -1,127 +1,133 @@
 import React, { Component } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { updateEmployees } from "../service/EmployeesService";
-import { myContext } from "../Contexts/myContext";
 
 export default class ModalEditEmployees extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      show: false,
-      selectedEmployees: {},
-      fullName: "",
-      age: "",
-      department: "",
-    };
-  }
-
-  static contextType = myContext;
-
-  handleModal = (item) => {
-    if (item) {
-      this.setState({
-        selectedEmployees: item,
-        age: item ? item.age : "",
-      });
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShow: false,
+            selectedEmployees: null,
+            fullName: "",
+            age: "",
+            department: "",
+        };
     }
-    this.setState({
-      show: !this.state.show,
-    });
-  };
 
-  onChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    handleModal = (item) => {
+        if (item) {
+            this.setState({
+                selectedEmployees: item,
+                age: item && item.age,
+            });
+        }
 
-    this.setState({
-      [name]: value,
-    });
-  };
+        if (this.state.isShow === true) {
+            this.setState({
+                age: "",
+                selectedEmployees: "",
+            });
+        }
 
-  onSubmit = () => {
-    const { fullName, age, department, selectedEmployees } = this.state;
-    const { getListEmployees } = this.context;
-    const data = {
-      fullName: fullName ? fullName : selectedEmployees.fullName,
-      age: age ? age : selectedEmployees.age,
-      department: department ? department : selectedEmployees.department,
+        this.setState({
+            isShow: !this.state.isShow,
+        });
     };
 
-    updateEmployees(data, selectedEmployees.id)
-      .then((res) => {
-        console.log("update thành công", res);
-      })
-      .catch((err) => {
-        console.log("update thất bại", err);
-      });
+    onChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
 
-    getListEmployees();
-    this.handleModal();
-  };
+        this.setState({
+            [name]: value,
+        });
+    };
 
-  render() {
-    const { show, selectedEmployees, age } = this.state;
-    return (
-      <div>
-        <Modal show={show} onHide={this.handleModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Sửa thông tin nhân viên</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Label>Tên</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder={
-                    selectedEmployees ? selectedEmployees.fullName : ""
-                  }
-                  name="fullName"
-                  onChange={(e) => this.onChange(e)}
-                />
-              </Form.Group>
+    onSubmit = () => {
+        const { fullName, age, department, selectedEmployees } = this.state;
+        const { createEmployees, editEmployees } = this.props;
+        const data = {
+            fullName: fullName ? fullName : selectedEmployees.fullName,
+            age: age ? age : selectedEmployees.age,
+            department: department ? department : selectedEmployees.department,
+        };
 
-              <Form.Group controlId="formBasicPassword">
-                <Form.Label>Tuổi</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder={selectedEmployees ? selectedEmployees.age : ""}
-                  name="age"
-                  value={age}
-                  onChange={(e) => this.onChange(e)}
-                />
-              </Form.Group>
+        if (selectedEmployees) {
+            editEmployees(data, selectedEmployees.id);
+        } else {
+            createEmployees(data);
+        }
 
-              <Form.Group controlId="formBasicPassword">
-                <Form.Label>Phòng ban</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder={
-                    selectedEmployees ? selectedEmployees.department : ""
-                  }
-                  name="department"
-                  onChange={(e) => this.onChange(e)}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                this.setState({
-                  show: false,
-                });
-              }}
-            >
-              Hủy
-            </Button>
-            <Button variant="primary" onClick={this.onSubmit}>
-              Lưu
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
-    );
-  }
+        this.handleModal();
+    };
+
+    render() {
+        const { isShow, selectedEmployees, age } = this.state;
+        return (
+            <div>
+                <Modal show={isShow} onHide={this.handleModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Sửa thông tin nhân viên</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group controlId="formBasicEmail">
+                                <Form.Label>Tên</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder={
+                                        selectedEmployees &&
+                                        selectedEmployees.fullName
+                                    }
+                                    name="fullName"
+                                    onChange={(e) => this.onChange(e)}
+                                />
+                            </Form.Group>
+
+                            <Form.Group controlId="formBasicPassword">
+                                <Form.Label>Tuổi</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder={
+                                        selectedEmployees &&
+                                        selectedEmployees.age
+                                    }
+                                    name="age"
+                                    value={age}
+                                    onChange={(e) => this.onChange(e)}
+                                />
+                            </Form.Group>
+
+                            <Form.Group controlId="formBasicPassword">
+                                <Form.Label>Phòng ban</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder={
+                                        selectedEmployees &&
+                                        selectedEmployees.department
+                                    }
+                                    name="department"
+                                    onChange={(e) => this.onChange(e)}
+                                />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                this.setState({
+                                    isShow: false,
+                                });
+                            }}
+                        >
+                            Hủy
+                        </Button>
+                        <Button variant="primary" onClick={this.onSubmit}>
+                            Lưu
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </div>
+        );
+    }
 }
