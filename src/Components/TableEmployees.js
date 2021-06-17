@@ -29,7 +29,10 @@ export default class TableEmployees extends Component {
                         <td>
                             <Button
                                 onClick={() => {
-                                    this.refModal.current.handleModal(item);
+                                    this.refModal.current.handleModal(
+                                        true,
+                                        item
+                                    );
                                 }}
                                 variant="warning"
                             >
@@ -57,7 +60,7 @@ export default class TableEmployees extends Component {
             <div>
                 <Button
                     variant="success"
-                    onClick={() => this.refModal.current.handleModal()}
+                    onClick={() => this.refModal.current.handleModal(true, "")}
                 >
                     + Thêm mới
                 </Button>

@@ -13,7 +13,7 @@ export default class ModalEditEmployees extends Component {
         };
     }
 
-    handleModal = (item) => {
+    handleModal = (value, item) => {
         if (item) {
             this.setState({
                 selectedEmployees: item,
@@ -21,7 +21,7 @@ export default class ModalEditEmployees extends Component {
             });
         }
 
-        if (this.state.isShow === true) {
+        if (value === false) {
             this.setState({
                 age: "",
                 selectedEmployees: "",
@@ -29,7 +29,7 @@ export default class ModalEditEmployees extends Component {
         }
 
         this.setState({
-            isShow: !this.state.isShow,
+            isShow: value,
         });
     };
 
@@ -57,14 +57,14 @@ export default class ModalEditEmployees extends Component {
             createEmployees(data);
         }
 
-        this.handleModal();
+        this.handleModal(false);
     };
 
     render() {
         const { isShow, selectedEmployees, age } = this.state;
         return (
             <div>
-                <Modal show={isShow} onHide={this.handleModal}>
+                <Modal show={isShow} onHide={() => this.handleModal(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Sửa thông tin nhân viên</Modal.Title>
                     </Modal.Header>
