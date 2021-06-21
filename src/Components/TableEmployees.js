@@ -1,90 +1,78 @@
-import React, { Component, createRef } from "react";
-import { Table, Button } from "react-bootstrap";
-import ModalEdit from "./ModalEditEmployees";
-import ModalDelete from "./ModalDelete";
+import { useState } from "react";
+import { Table, Button, Modal } from "react-bootstrap";
+import { connect } from "react-redux";
 
-export default class TableEmployees extends Component {
-    constructor(props) {
-        super(props);
-        this.refModal = createRef();
-        this.refModalDelete = createRef();
-    }
+import { REDUCER_EMPLOYEES } from "./../constants";
+import EmployeeItem from "./EmployeeItem";
+import ModalEditEmployees from "./ModalEditEmployees";
+import * as actions from "../actions/EmployeeAction";
 
-    render() {
-        const { employees } = this.props.employees;
-        const { createEmployees, editEmployees, deleteEmployees } = this.props;
+const mapStateToProps = (state) => {
+    return {
+        employeeIds: state[REDUCER_EMPLOYEES].employeeIds,
+    };
+};
 
-        let listItem;
-        if (employees.length > 0) {
-            listItem = employees.map((item, key, array) => {
-                const index = array.findIndex(
-                    (element) => element.id === item.id
-                );
-                return (
-                    <tr key={key}>
-                        <td>{index + 1}</td>
-                        <td>{item.fullName}</td>
-                        <td>{item.age}</td>
-                        <td>{item.department}</td>
-                        <td>
-                            <Button
-                                onClick={() => {
-                                    this.refModal.current.handleModal(
-                                        true,
-                                        item
-                                    );
-                                }}
-                                variant="warning"
-                            >
-                                Sửa
-                            </Button>
-                        </td>
-                        <td>
-                            <Button
-                                onClick={() => {
-                                    this.refModalDelete.current.handleModal(
-                                        item
-                                    );
-                                }}
-                                variant="danger"
-                            >
-                                Xóa
-                            </Button>
-                        </td>
-                    </tr>
-                );
-            });
-        }
+const mapDispatchToProps = (dispatch) => {
+    return {
+        createEmployee: (newEmployee) => {
+            dispatch(actions.createEmployee(newEmployee));
+        },
+    };
+};
 
+export default connect(mapStateToProps, mapDispatchToProps)(TableEmployees);
+
+function TableEmployees(props) {
+    const [isShowModal, setIsShowModal] = useState(false);
+
+    const renderListEmployee = () => {
+        const { employeeIds } = props;
         return (
-            <div>
-                <Button
-                    variant="success"
-                    onClick={() => this.refModal.current.handleModal(true, "")}
-                >
-                    + Thêm mới
-                </Button>
-                <Table striped bordered hover className="mt-4">
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Họ và Tên</th>
-                            <th>Tuổi</th>
-                            <th>Phòng ban</th>
-                        </tr>
-                    </thead>
-                    <tbody>{listItem}</tbody>
-                </Table>
-                <ModalEdit
-                    createEmployees={createEmployees}
-                    editEmployees={editEmployees}
-                    ref={this.refModal}
-                />
-                <ModalDelete
-                    deleteEmployees={deleteEmployees}
-                    ref={this.refModalDelete}
-                />
-            </div>
+            employeeIds.length > 0 &&
+            employeeIds.map((employeeId, index) => {
+                return (
+                    <EmployeeItem
+                        key={employeeId}
+                        employeeId={employeeId}
+                        index={index}
+                    />
+                );
+            })
         );
-    }
+    };
+
+    console.log("render lại table");
+
+    return (
+        <div>
+            <Button variant="success" onClick={() => setIsShowModal(true)}>
+                + Thêm mới
+            </Button>
+            <Table striped bordered hover className="mt-4">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Họ và Tên</th>
+                        <th>Tuổi</th>
+                        <th>Phòng ban</th>
+                    </tr>
+                </thead>
+                <tbody>{renderListEmployee()}</tbody>
+            </Table>
+            <Modal
+                show={isShowModal}
+                onHide={() => {
+                    setIsShowModal(false);
+                }}
+            >
+                <ModalEditEmployees
+                    handleModalDelete={() => {
+                        setIsShowModal(false);
+                    }}
+                    createEmployee={props.createEmployee}
+                />
+            </Modal>
+        </div>
+    );
 }

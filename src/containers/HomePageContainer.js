@@ -1,27 +1,19 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import TableEmployees from "../components/TableEmployees";
 import * as actions from "../actions/EmployeeAction";
 
-export class HomePageContainer extends Component {
-    componentDidMount() {
-        this.props.getEmployees();
-    }
+export function HomePageContainer(props) {
+    useEffect(() => {
+        props.getEmployees();
+    }, []);
 
-    render() {
-        return (
-            <div>
-                <TableEmployees {...this.props} />
-            </div>
-        );
-    }
+    return (
+        <div>
+            <TableEmployees {...props} />
+        </div>
+    );
 }
-
-const mapStateToProps = (state) => {
-    return {
-        employees: state.employees,
-    };
-};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -40,4 +32,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePageContainer);
+export default connect(null, mapDispatchToProps)(HomePageContainer);

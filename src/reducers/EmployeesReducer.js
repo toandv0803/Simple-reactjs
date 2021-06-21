@@ -1,7 +1,8 @@
 import * as types from "../constants";
 
 const DEFAULT_STATE = {
-    employees: [],
+    employeeIds: [],
+    employeeById: {},
     isFetching: false,
     dataFetched: false,
     error: false,
@@ -16,13 +17,18 @@ export default (state = DEFAULT_STATE, action) => {
                 isFetching: true,
             };
         case types.GET_EMPLOYEES_SUCCESS:
+            const employeeById = {};
+            action.payload.forEach((item) => {
+                employeeById[item.id] = item;
+            });
             return {
                 ...state,
                 isFetching: false,
                 dataFetched: true,
                 error: false,
                 errorMessage: null,
-                employees: action.payload,
+                employeeIds: action.payload.map((item) => item.id),
+                employeeById,
             };
         case types.GET_EMPLOYEES_FAILURE:
             return {
@@ -38,13 +44,21 @@ export default (state = DEFAULT_STATE, action) => {
                 isFetching: true,
             };
         case types.CREATE_EMPLOYEES_SUCCESS:
+            const newEmployeesCreate = { ...state.employeeById };
+            const newEmployeesIdCreate = [
+                ...state.employeeIds,
+                action.payload.id,
+            ];
+
+            newEmployeesCreate[action.payload.id] = action.payload;
             return {
                 ...state,
                 isFetching: false,
                 dataFetched: true,
                 error: false,
                 errorMessage: null,
-                employees: [...state.employees, action.payload],
+                employeeById: newEmployeesCreate,
+                employeeIds: newEmployeesIdCreate,
             };
         case types.CREATE_EMPLOYEES_FAILURE:
             return {
@@ -60,18 +74,17 @@ export default (state = DEFAULT_STATE, action) => {
                 isFetching: true,
             };
         case types.EDIT_EMPLOYEES_SUCCESS:
-            const index = state.employees.findIndex(
-                (element) => element.id === action.payload.id
-            );
-            let employees = state.employees;
-            employees.splice(index, 1, action.payload);
+            const newEmployeesEdit = { ...state.employeeById };
+            const idEdit = action.payload.id;
+            newEmployeesEdit[idEdit] = action.payload;
+
             return {
                 ...state,
                 isFetching: false,
                 dataFetched: true,
                 error: false,
                 errorMessage: null,
-                employees: employees,
+                employeeById: newEmployeesEdit,
             };
         case types.EDIT_EMPLOYEES_FAILURE:
             return {
@@ -87,18 +100,22 @@ export default (state = DEFAULT_STATE, action) => {
                 isFetching: true,
             };
         case types.DELETE_EMPLOYEES_SUCCESS:
-            const indexDelete = state.employees.findIndex(
-                (element) => element.id === action.payload.id
+            const id = action.payload.id;
+            const { [id]: _, ...employeeByIdDeleted } = state.employeeById;
+            const employeeIdsDeleted = [...state.employeeIds];
+            employeeIdsDeleted.splice(
+                employeeIdsDeleted.indexOf(action.payload.id),
+                1
             );
-            let employeesDeleted = state.employees;
-            employeesDeleted.splice(indexDelete, 1);
+
             return {
                 ...state,
                 isFetching: false,
                 dataFetched: true,
                 error: false,
                 errorMessage: null,
-                employees: employeesDeleted,
+                employeeById: employeeByIdDeleted,
+                employeeIds: employeeIdsDeleted,
             };
         case types.DELETE_EMPLOYEES_FAILURE:
             return {
