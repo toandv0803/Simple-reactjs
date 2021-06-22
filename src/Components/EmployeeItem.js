@@ -3,13 +3,13 @@ import { Button, Modal } from "react-bootstrap";
 import React from "react";
 import { connect } from "react-redux";
 
-import { REDUCER_EMPLOYEES } from "./../constants";
+import { REDUCER_NAME } from "./../reducers/EmployeesReducer";
 import ModalDelete from "./ModalDelete";
 import ModalEdit from "./ModalEditEmployees";
 import * as actions from "../actions/EmployeeAction";
 
 const mapStateToProps = (state, { employeeId }) => ({
-    employee: state[REDUCER_EMPLOYEES].employeeById[employeeId],
+    employee: state[REDUCER_NAME].employeeById[employeeId],
 });
 
 const mapDispatchToProps = (dispatch) => {

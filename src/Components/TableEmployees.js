@@ -2,14 +2,14 @@ import { useState } from "react";
 import { Table, Button, Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 
-import { REDUCER_EMPLOYEES } from "./../constants";
+import { REDUCER_NAME } from "./../reducers/EmployeesReducer";
 import EmployeeItem from "./EmployeeItem";
 import ModalEditEmployees from "./ModalEditEmployees";
 import * as actions from "../actions/EmployeeAction";
 
 const mapStateToProps = (state) => {
     return {
-        employeeIds: state[REDUCER_EMPLOYEES].employeeIds,
+        employeeIds: state[REDUCER_NAME].employeeIds,
     };
 };
 

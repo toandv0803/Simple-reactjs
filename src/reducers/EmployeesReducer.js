@@ -1,5 +1,3 @@
-import * as types from "../constants";
-
 const DEFAULT_STATE = {
     employeeIds: [],
     employeeById: {},
@@ -11,12 +9,12 @@ const DEFAULT_STATE = {
 
 export default (state = DEFAULT_STATE, action) => {
     switch (action.type) {
-        case types.GET_EMPLOYEES_REQUEST:
+        case GET_EMPLOYEES_REQUEST:
             return {
                 ...state,
                 isFetching: true,
             };
-        case types.GET_EMPLOYEES_SUCCESS:
+        case GET_EMPLOYEES_SUCCESS:
             const employeeById = {};
             action.payload.forEach((item) => {
                 employeeById[item.id] = item;
@@ -30,7 +28,7 @@ export default (state = DEFAULT_STATE, action) => {
                 employeeIds: action.payload.map((item) => item.id),
                 employeeById,
             };
-        case types.GET_EMPLOYEES_FAILURE:
+        case GET_EMPLOYEES_FAILURE:
             return {
                 ...state,
                 isFetching: false,
@@ -38,12 +36,12 @@ export default (state = DEFAULT_STATE, action) => {
                 errorMessage: action.payload.errorMessage,
             };
 
-        case types.CREATE_EMPLOYEES_REQUEST:
+        case CREATE_EMPLOYEES_REQUEST:
             return {
                 ...state,
                 isFetching: true,
             };
-        case types.CREATE_EMPLOYEES_SUCCESS:
+        case CREATE_EMPLOYEES_SUCCESS:
             const newEmployeesCreate = { ...state.employeeById };
             const newEmployeesIdCreate = [
                 ...state.employeeIds,
@@ -60,7 +58,7 @@ export default (state = DEFAULT_STATE, action) => {
                 employeeById: newEmployeesCreate,
                 employeeIds: newEmployeesIdCreate,
             };
-        case types.CREATE_EMPLOYEES_FAILURE:
+        case CREATE_EMPLOYEES_FAILURE:
             return {
                 ...state,
                 isFetching: false,
@@ -68,12 +66,12 @@ export default (state = DEFAULT_STATE, action) => {
                 errorMessage: action.payload.errorMessage,
             };
 
-        case types.EDIT_EMPLOYEES_REQUEST:
+        case EDIT_EMPLOYEES_REQUEST:
             return {
                 ...state,
                 isFetching: true,
             };
-        case types.EDIT_EMPLOYEES_SUCCESS:
+        case EDIT_EMPLOYEES_SUCCESS:
             const newEmployeesEdit = { ...state.employeeById };
             const idEdit = action.payload.id;
             newEmployeesEdit[idEdit] = action.payload;
@@ -86,7 +84,7 @@ export default (state = DEFAULT_STATE, action) => {
                 errorMessage: null,
                 employeeById: newEmployeesEdit,
             };
-        case types.EDIT_EMPLOYEES_FAILURE:
+        case EDIT_EMPLOYEES_FAILURE:
             return {
                 ...state,
                 isFetching: false,
@@ -94,12 +92,12 @@ export default (state = DEFAULT_STATE, action) => {
                 errorMessage: action.payload.errorMessage,
             };
 
-        case types.DELETE_EMPLOYEES_REQUEST:
+        case DELETE_EMPLOYEES_REQUEST:
             return {
                 ...state,
                 isFetching: true,
             };
-        case types.DELETE_EMPLOYEES_SUCCESS:
+        case DELETE_EMPLOYEES_SUCCESS:
             const id = action.payload.id;
             const { [id]: _, ...employeeByIdDeleted } = state.employeeById;
             const employeeIdsDeleted = [...state.employeeIds];
@@ -117,7 +115,7 @@ export default (state = DEFAULT_STATE, action) => {
                 employeeById: employeeByIdDeleted,
                 employeeIds: employeeIdsDeleted,
             };
-        case types.DELETE_EMPLOYEES_FAILURE:
+        case DELETE_EMPLOYEES_FAILURE:
             return {
                 ...state,
                 isFetching: false,
@@ -129,3 +127,21 @@ export default (state = DEFAULT_STATE, action) => {
             return state;
     }
 };
+
+export const REDUCER_NAME = "EMPLOYEES_REDUCER";
+
+export const GET_EMPLOYEES_REQUEST = `${REDUCER_NAME}GET_EMPLOYEES_REQUEST`;
+export const GET_EMPLOYEES_SUCCESS = `${REDUCER_NAME}GET_EMPLOYEES_SUCCESS`;
+export const GET_EMPLOYEES_FAILURE = `${REDUCER_NAME}GET_EMPLOYEES_FAILURE`;
+
+export const CREATE_EMPLOYEES_REQUEST = `${REDUCER_NAME}CREATE_EMPLOYEES_REQUEST`;
+export const CREATE_EMPLOYEES_SUCCESS = `${REDUCER_NAME}CREATE_EMPLOYEES_SUCCESS`;
+export const CREATE_EMPLOYEES_FAILURE = `${REDUCER_NAME}CREATE_EMPLOYEES_FAILURE`;
+
+export const EDIT_EMPLOYEES_REQUEST = `${REDUCER_NAME}EDIT_EMPLOYEES_REQUEST`;
+export const EDIT_EMPLOYEES_SUCCESS = `${REDUCER_NAME}EDIT_EMPLOYEES_SUCCESS`;
+export const EDIT_EMPLOYEES_FAILURE = `${REDUCER_NAME}EDIT_EMPLOYEES_FAILURE`;
+
+export const DELETE_EMPLOYEES_REQUEST = `${REDUCER_NAME}DELETE_EMPLOYEES_REQUEST`;
+export const DELETE_EMPLOYEES_SUCCESS = `${REDUCER_NAME}DELETE_EMPLOYEES_SUCCESS`;
+export const DELETE_EMPLOYEES_FAILURE = `${REDUCER_NAME}DELETE_EMPLOYEES_FAILURE`;

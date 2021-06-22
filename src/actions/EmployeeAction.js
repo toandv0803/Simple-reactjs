@@ -1,21 +1,26 @@
-import * as types from "../constants";
+import {
+    GET_EMPLOYEES_REQUEST,
+    CREATE_EMPLOYEES_REQUEST,
+    EDIT_EMPLOYEES_REQUEST,
+    DELETE_EMPLOYEES_REQUEST,
+} from "../reducers/EmployeesReducer";
 
 export function getEmployees() {
     return {
-        type: types.GET_EMPLOYEES_REQUEST,
+        type: GET_EMPLOYEES_REQUEST,
     };
 }
 
 export function createEmployee(payload) {
     return {
-        type: types.CREATE_EMPLOYEES_REQUEST,
+        type: CREATE_EMPLOYEES_REQUEST,
         payload,
     };
 }
 
 export function editEmployee(payload, id) {
     return {
-        type: types.EDIT_EMPLOYEES_REQUEST,
+        type: EDIT_EMPLOYEES_REQUEST,
         payload,
         id,
     };
@@ -23,7 +28,7 @@ export function editEmployee(payload, id) {
 
 export function deleteEmployee(id) {
     return {
-        type: types.DELETE_EMPLOYEES_REQUEST,
+        type: DELETE_EMPLOYEES_REQUEST,
         id,
     };
 }
