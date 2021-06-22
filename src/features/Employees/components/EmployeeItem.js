@@ -1,58 +1,49 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import React from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { REDUCER_NAME } from "./../reducers/EmployeesReducer";
+import { editEmployees, deleteEmployees } from "../slices/EmployeesSlice";
+import ModalForm from "./ModalForm";
 import ModalDelete from "./ModalDelete";
-import ModalEdit from "./ModalEditEmployees";
-import * as actions from "../actions/EmployeeAction";
-
-const mapStateToProps = (state, { employeeId }) => ({
-    employee: state[REDUCER_NAME].employeeById[employeeId],
-});
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        editEmployees: (data, id) => {
-            dispatch(actions.editEmployee(data, id));
-        },
-        deleteEmployees: (id) => {
-            dispatch(actions.deleteEmployee(id));
-        },
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeeItem);
 
 const MODAL = {
     EDIT: "EDIT",
     DELETE: "DELETE",
 };
 
-function EmployeeItem({
-    employee,
-    index,
-    deleteEmployees,
-    employeeId,
-    editEmployees,
-}) {
+export default React.memo(EmployeeItem);
+
+function EmployeeItem({ index, employeeId }) {
     const [isShowModal, setIsShowModal] = useState({
         [MODAL.EDIT]: false,
         [MODAL.DELETE]: false,
     });
 
+    const employeeById = useSelector(
+        (state) => state.employeesReducer.employeeById[employeeId]
+    );
+
+    const dispatch = useDispatch();
+
+    const handleEditEmployee = (data) => {
+        dispatch(editEmployees(data));
+    };
+
+    const handleDeleteEmployee = (id) => {
+        dispatch(deleteEmployees(id));
+    };
+
     console.log("render lại item");
 
     return (
-        employee &&
+        employeeById &&
         employeeId && (
             <>
-                <tr key={employee.id}>
+                <tr key={employeeById.id}>
                     <td>{index + 1}</td>
-                    <td>{employee.fullName}</td>
-                    <td>{employee.age}</td>
-                    <td>{employee.department}</td>
+                    <td>{employeeById.fullName}</td>
+                    <td>{employeeById.age}</td>
+                    <td>{employeeById.department}</td>
                     <td>
                         <Button
                             onClick={() => {
@@ -89,15 +80,15 @@ function EmployeeItem({
                         });
                     }}
                 >
-                    <ModalEdit
-                        selectedItem={employee}
+                    <ModalForm
+                        selectedItem={employeeById}
                         handleModalDelete={() => {
                             setIsShowModal({
                                 [MODAL.EDIT]: false,
                                 [MODAL.DELETE]: false,
                             });
                         }}
-                        editEmployees={editEmployees}
+                        editEmployees={handleEditEmployee}
                     />
                 </Modal>
                 <Modal
@@ -110,14 +101,14 @@ function EmployeeItem({
                     }}
                 >
                     <ModalDelete
-                        deleteEmployees={deleteEmployees}
+                        deleteEmployees={handleDeleteEmployee}
                         handleModalDelete={() => {
                             setIsShowModal({
                                 [MODAL.EDIT]: false,
                                 [MODAL.DELETE]: false,
                             });
                         }}
-                        selectedItem={employee}
+                        selectedItem={employeeById}
                     />
                 </Modal>
             </>

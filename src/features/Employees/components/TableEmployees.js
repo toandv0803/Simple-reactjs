@@ -1,33 +1,27 @@
-import { useState } from "react";
-import { Table, Button, Modal } from "react-bootstrap";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Button, Modal, Table } from "react-bootstrap";
 
-import { REDUCER_NAME } from "./../reducers/EmployeesReducer";
+import { getEmployees, createEmployees } from "../slices/EmployeesSlice";
 import EmployeeItem from "./EmployeeItem";
-import ModalEditEmployees from "./ModalEditEmployees";
-import * as actions from "../actions/EmployeeAction";
+import ModalForm from "./ModalForm";
 
-const mapStateToProps = (state) => {
-    return {
-        employeeIds: state[REDUCER_NAME].employeeIds,
-    };
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        createEmployee: (newEmployee) => {
-            dispatch(actions.createEmployee(newEmployee));
-        },
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TableEmployees);
-
-function TableEmployees(props) {
+export default function TableEmployees() {
+    const dispatch = useDispatch();
+    const employeeIds = useSelector(
+        (state) => state.employeesReducer.employeeIds
+    );
     const [isShowModal, setIsShowModal] = useState(false);
 
+    useEffect(() => {
+        dispatch(getEmployees());
+    }, []);
+
+    const handleCreateEmployees = (data) => {
+        dispatch(createEmployees(data));
+    };
+
     const renderListEmployee = () => {
-        const { employeeIds } = props;
         return (
             employeeIds.length > 0 &&
             employeeIds.map((employeeId, index) => {
@@ -66,11 +60,11 @@ function TableEmployees(props) {
                     setIsShowModal(false);
                 }}
             >
-                <ModalEditEmployees
+                <ModalForm
                     handleModalDelete={() => {
                         setIsShowModal(false);
                     }}
-                    createEmployee={props.createEmployee}
+                    createEmployee={handleCreateEmployees}
                 />
             </Modal>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 
-export default function ModalEditEmployees(props) {
+export default function ModalForm(props) {
     const [inputValues, setInputValues] = useState({});
     const { selectedItem } = props;
 
@@ -26,7 +26,7 @@ export default function ModalEditEmployees(props) {
         };
 
         if (selectedItem) {
-            editEmployees(data, selectedItem.id);
+            editEmployees({ data, id: selectedItem.id });
         } else {
             createEmployee(data);
         }
