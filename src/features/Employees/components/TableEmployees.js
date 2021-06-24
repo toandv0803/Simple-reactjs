@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Modal, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 
 import { getEmployees, createEmployees } from "../slices/EmployeesSlice";
 import EmployeeItem from "./EmployeeItem";
@@ -11,7 +11,6 @@ export default function TableEmployees() {
     const employeeIds = useSelector(
         (state) => state.employeesReducer.employeeIds
     );
-    const [isShowModal, setIsShowModal] = useState(false);
 
     useEffect(() => {
         dispatch(getEmployees());
@@ -36,13 +35,9 @@ export default function TableEmployees() {
         );
     };
 
-    console.log("render lại table");
-
     return (
         <div>
-            <Button variant="success" onClick={() => setIsShowModal(true)}>
-                + Thêm mới
-            </Button>
+            <ModalForm type="create" createEmployee={handleCreateEmployees} />
             <Table striped bordered hover className="mt-4">
                 <thead>
                     <tr>
@@ -54,19 +49,6 @@ export default function TableEmployees() {
                 </thead>
                 <tbody>{renderListEmployee()}</tbody>
             </Table>
-            <Modal
-                show={isShowModal}
-                onHide={() => {
-                    setIsShowModal(false);
-                }}
-            >
-                <ModalForm
-                    handleModalDelete={() => {
-                        setIsShowModal(false);
-                    }}
-                    createEmployee={handleCreateEmployees}
-                />
-            </Modal>
         </div>
     );
 }
